@@ -9,10 +9,14 @@
             margin: 0;
             height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e293b); /* Sfondo blu scuro tecnologico */
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             color: #e2e8f0;
             overflow: hidden;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         canvas {
@@ -21,33 +25,21 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            pointer-events: none; /* Permette click sotto il canvas */
+            pointer-events: none;
         }
 
-        .container {
+        .content {
             position: relative;
             z-index: 2;
-            text-align: center;
             max-width: 90%;
             width: 680px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(15, 23, 42, 0.65);
-            backdrop-filter: blur(8px);
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.18);
+            padding: 40px 20px;
         }
 
         #logo {
             max-width: 280px;
             margin-bottom: 32px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+            /* Nessun bordo, nessuna ombra, nessuna forma extra */
         }
 
         h1 {
@@ -62,11 +54,12 @@
             color: #cbd5e1;
             line-height: 1.7;
             max-width: 640px;
+            margin: 0 auto 40px;
         }
 
         .contact-links {
-            margin-top: 40px;
             display: flex;
+            justify-content: center;
             align-items: center;
             gap: 32px;
         }
@@ -99,7 +92,7 @@
 <body>
     <canvas id="neuralCanvas"></canvas>
 
-    <div class="container">
+    <div class="content">
         <img src="https://raw.githubusercontent.com/toniocarnialman/dynamiccodes.it/main/logo.png" alt="Logo Dynamic Codes" id="logo">
         
         <h1>Stiamo Costruendo il Futuro del Tuo Business</h1>
@@ -117,9 +110,8 @@
     <script>
         const canvas = document.getElementById('neuralCanvas');
         const ctx = canvas.getContext('2d');
-
         let width, height;
-        let mouse = { x: 0, y: 0, down: false };
+        let mouse = { x: 0, y: 0 };
 
         function resize() {
             width = canvas.width = window.innerWidth;
@@ -129,7 +121,6 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // Mouse events
         window.addEventListener('mousemove', e => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
@@ -142,7 +133,6 @@
             }
         }, { passive: true });
 
-        // Particelle / nodi neurali
         class Node {
             constructor() {
                 this.x = Math.random() * width;
@@ -150,19 +140,14 @@
                 this.vx = (Math.random() - 0.5) * 0.6;
                 this.vy = (Math.random() - 0.5) * 0.6;
                 this.size = Math.random() * 3 + 1.5;
-                this.hue = 200 + Math.random() * 40; // blu-azzurro
+                this.hue = 200 + Math.random() * 40;
             }
-
             update() {
-                // Leggero movimento base
                 this.x += this.vx;
                 this.y += this.vy;
-
-                // Rimbalzo bordi
                 if (this.x < 0 || this.x > width) this.vx *= -1;
                 if (this.y < 0 || this.y > height) this.vy *= -1;
 
-                // Attrazione lieve verso mouse (effetto neuroni che reagiscono)
                 const dx = mouse.x - this.x;
                 const dy = mouse.y - this.y;
                 const dist = Math.sqrt(dx*dx + dy*dy);
@@ -176,22 +161,21 @@
         }
 
         const nodes = [];
-        const nodeCount = Math.min( Math.floor(width * height / 9000), 180 ); // ~120-180 nodi
+        const nodeCount = Math.min(Math.floor(width * height / 9000), 180);
 
         for (let i = 0; i < nodeCount; i++) {
             nodes.push(new Node());
         }
 
         function animate() {
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.08)'; // leggero trail
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.08)';
             ctx.fillRect(0, 0, width, height);
 
-            // Disegna connessioni
             for (let i = 0; i < nodes.length; i++) {
                 const n1 = nodes[i];
                 n1.update();
 
-                for (let j = i+1; j < nodes.length; j++) {
+                for (let j = i + 1; j < nodes.length; j++) {
                     const n2 = nodes[j];
                     const dx = n1.x - n2.x;
                     const dy = n1.y - n2.y;
@@ -209,7 +193,6 @@
                 }
             }
 
-            // Disegna nodi
             for (const node of nodes) {
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.size, 0, Math.PI * 2);
@@ -227,4 +210,3 @@
     </script>
 </body>
 </html>
-
