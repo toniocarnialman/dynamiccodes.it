@@ -12,33 +12,29 @@
             height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a1a; /* Sfondo scuro per un look tecnologico */
+            background-color: #1a1a1a;
             color: #f0f0f0;
-            overflow: hidden; /* Nasconde lo scroll per l'animazione di sfondo */
+            overflow: hidden;
         }
-        
-        /* Animazione di sfondo "Matrix" */
-        .matrix-bg {
+
+        /* Canvas per lo sfondo interattivo */
+        #particle-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
-            overflow: hidden;
-            font-family: 'Courier New', Courier, monospace;
-            color: #00ff41;
-            opacity: 0.3;
         }
 
-        .container {
+       .container {
             position: relative;
             z-index: 2;
             text-align: center;
-            background: rgba(26, 26, 26, 0.85); /* Sfondo del contenitore semi-trasparente */
+            background: rgba(26, 26, 26, 0.85);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 25px rgba(0, 170, 255, 0.2); /* Ombra più morbida, bluastra */
             max-width: 90%;
             width: 600px;
         }
@@ -60,7 +56,7 @@
             line-height: 1.6;
         }
 
-        .contact-links {
+       .contact-links {
             margin-top: 30px;
             display: flex;
             justify-content: center;
@@ -68,14 +64,14 @@
             gap: 25px;
         }
 
-        .contact-links a {
-            color: #00ff41;
+       .contact-links a {
+            color: #00aaff; /* Blu coordinato con l'ombra */
             text-decoration: none;
             font-size: 1.1em;
             transition: color 0.3s ease;
         }
 
-        .contact-links a:hover {
+       .contact-links a:hover {
             color: #ffffff;
         }
 
@@ -89,16 +85,15 @@
         #linkedin-logo:hover {
             transform: scale(1.1);
         }
-
     </style>
 </head>
 <body>
 
-    <div class="matrix-bg" id="matrix"></div>
+    <canvas id="particle-canvas"></canvas>
 
     <div class="container">
-        <!-- Inserisci qui il percorso del tuo logo -->
-        <img src="attachment://0" alt="Logo Dynamic Codes" id="logo">
+        <!-- Logo caricato dal tuo repository GitHub -->
+        <img src="https://raw.githubusercontent.com/toniocarnialman/dynamiccodes.it/main/dc_logo.png" alt="Logo Dynamic Codes" id="logo">
         <h1>Stiamo Costruendo il Futuro del Tuo Business</h1>
         <p>La nostra piattaforma è quasi pronta per rivoluzionare il modo in cui la tua azienda cresce. Stiamo mettendo a punto gli ultimi dettagli per offrirti un servizio senza precedenti.</p>
         <div class="contact-links">
@@ -110,35 +105,116 @@
     </div>
 
     <script>
-        // Script per l'animazione "Matrix"
-        const matrix = document.getElementById('matrix');
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
-        const fontSize = 14;
-        const columns = window.innerWidth / fontSize;
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        for (let i = 0; i < columns; i++) {
-            const drop = document.createElement('div');
-            drop.style.position = 'absolute';
-            drop.style.left = `${i * fontSize}px`;
-            drop.style.top = `${Math.random() * -window.innerHeight}px`;
-            drop.style.width = `${fontSize}px`;
-            drop.style.height = '100%';
-            
-            let stream = '';
-            for(let y=0; y<40; y++) {
-                stream += chars.charAt(Math.floor(Math.random() * chars.length)) + '<br>';
+        let particlesArray;
+
+        // Posizione del mouse
+        const mouse = {
+            x: null,
+            y: null,
+            radius: (canvas.height / 80) * (canvas.width / 80)
+        };
+
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        // Classe per creare le particelle
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
             }
-            drop.innerHTML = stream;
-            
-            setInterval(() => {
-                drop.style.top = `${parseInt(drop.style.top) + fontSize}px`;
-                if (parseInt(drop.style.top) > window.innerHeight) {
-                    drop.style.top = `${Math.random() * -window.innerHeight}px`;
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#8C8C8C';
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
                 }
-            }, Math.random() * 50 + 50);
-            
-            matrix.appendChild(drop);
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
         }
+
+        // Creazione dell'array di particelle
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = '#8C8C8C';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Animazione
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray.update();
+            }
+            connect();
+        }[i]
+
+        // Collegamento delle particelle
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray.x - particlesArray.x) * (particlesArray.x - particlesArray.x)) +
+                                   ((particlesArray.y - particlesArray.y) * (particlesArray.y - particlesArray.y));
+                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = `rgba(140, 140, 140, ${opacityValue})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray.x, particlesArray.y);
+                        ctx.lineTo(particlesArray.x, particlesArray.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        // Ridimensionamento della finestra
+         window.addEventListener('resize', function(){
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            mouse.radius = ((canvas.height/80) * (canvas.height/80));
+            init();
+        });
+        
+        // Per evitare che il mouse sparisca all'uscita dalla finestra
+        window.addEventListener('mouseout', function(){
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });[a][b]
+
+        init();
+        animate();
     </script>
 
 </body>
