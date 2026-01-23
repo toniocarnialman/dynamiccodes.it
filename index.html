@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work in Progress</title>
+    <title>Dynamic Codes - In Arrivo</title>
     <style>
         body {
             display: flex;
@@ -12,26 +12,134 @@
             height: 100vh;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ece9e6, #ffffff);
-            color: #333;
+            background-color: #1a1a1a; /* Sfondo scuro per un look tecnologico */
+            color: #f0f0f0;
+            overflow: hidden; /* Nasconde lo scroll per l'animazione di sfondo */
         }
+        
+        /* Animazione di sfondo "Matrix" */
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            font-family: 'Courier New', Courier, monospace;
+            color: #00ff41;
+            opacity: 0.3;
+        }
+
         .container {
+            position: relative;
+            z-index: 2;
             text-align: center;
+            background: rgba(26, 26, 26, 0.85); /* Sfondo del contenitore semi-trasparente */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.2);
+            max-width: 90%;
+            width: 600px;
         }
+        
+        #logo {
+            max-width: 250px;
+            margin-bottom: 20px;
+        }
+
         h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 0.5em;
+            color: #ffffff;
         }
+
         p {
             font-size: 1.2em;
-            color: #666;
+            color: #cccccc;
+            line-height: 1.6;
         }
+
+        .contact-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .contact-links a {
+            color: #00ff41;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            color: #ffffff;
+        }
+
+        #linkedin-logo {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            transition: transform 0.3s ease;
+        }
+
+        #linkedin-logo:hover {
+            transform: scale(1.1);
+        }
+
     </style>
 </head>
 <body>
+
+    <div class="matrix-bg" id="matrix"></div>
+
     <div class="container">
-        <h1>Work in Progress</h1>
-        <p>Il nostro sito sarà presto online. Torna a trovarci!</p>
+        <!-- Inserisci qui il percorso del tuo logo -->
+        <img src="attachment://0" alt="Logo Dynamic Codes" id="logo">
+        <h1>Stiamo Costruendo il Futuro del Tuo Business</h1>
+        <p>La nostra piattaforma è quasi pronta per rivoluzionare il modo in cui la tua azienda cresce. Stiamo mettendo a punto gli ultimi dettagli per offrirti un servizio senza precedenti.</p>
+        <div class="contact-links">
+            <a href="mailto:cardinale.antonio85@gmail.com">Contattaci per maggiori info</a>
+            <a href="https://www.linkedin.com/company/dynamiccodes" target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="Pagina LinkedIn" id="linkedin-logo">
+            </a>
+        </div>
     </div>
+
+    <script>
+        // Script per l'animazione "Matrix"
+        const matrix = document.getElementById('matrix');
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const fontSize = 14;
+        const columns = window.innerWidth / fontSize;
+
+        for (let i = 0; i < columns; i++) {
+            const drop = document.createElement('div');
+            drop.style.position = 'absolute';
+            drop.style.left = `${i * fontSize}px`;
+            drop.style.top = `${Math.random() * -window.innerHeight}px`;
+            drop.style.width = `${fontSize}px`;
+            drop.style.height = '100%';
+            
+            let stream = '';
+            for(let y=0; y<40; y++) {
+                stream += chars.charAt(Math.floor(Math.random() * chars.length)) + '<br>';
+            }
+            drop.innerHTML = stream;
+            
+            setInterval(() => {
+                drop.style.top = `${parseInt(drop.style.top) + fontSize}px`;
+                if (parseInt(drop.style.top) > window.innerHeight) {
+                    drop.style.top = `${Math.random() * -window.innerHeight}px`;
+                }
+            }, Math.random() * 50 + 50);
+            
+            matrix.appendChild(drop);
+        }
+    </script>
+
 </body>
 </html>
