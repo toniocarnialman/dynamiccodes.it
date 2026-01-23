@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Codes - In Arrivo</title>
+    <title>Dynamic Codes - Soluzioni Software</title>
     <style>
         body {
             margin: 0;
@@ -32,42 +32,62 @@
             position: relative;
             z-index: 2;
             max-width: 90%;
-            width: 680px;
+            width: 720px;
             padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wip-banner {
+            background: rgba(59, 130, 246, 0.18);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+            border-radius: 12px;
+            padding: 16px 28px;
+            margin-bottom: 36px;
+            max-width: 580px;
+            font-size: 1.15em;
+            color: #bfdbfe;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.12);
+        }
+
+        .wip-banner strong {
+            color: #93c5fd;
         }
 
         #logo {
             max-width: 280px;
-            margin-bottom: 32px;
-            /* Nessun bordo, nessuna ombra, nessuna forma extra */
+            margin-bottom: 40px;
         }
 
         h1 {
-            font-size: 2.8em;
-            margin: 0 0 0.6em;
+            font-size: 2.9em;
+            margin: 0 0 0.5em;
             color: #dbeafe;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            font-weight: 600;
         }
 
         p {
-            font-size: 1.25em;
+            font-size: 1.28em;
             color: #cbd5e1;
-            line-height: 1.7;
-            max-width: 640px;
-            margin: 0 auto 40px;
+            line-height: 1.68;
+            max-width: 680px;
+            margin: 0 auto 48px;
         }
 
         .contact-links {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 32px;
+            gap: 36px;
         }
 
         .contact-links a {
             color: #60a5fa;
             text-decoration: none;
-            font-size: 1.15em;
+            font-size: 1.18em;
             transition: all 0.3s ease;
         }
 
@@ -77,8 +97,8 @@
         }
 
         #linkedin-logo {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             transition: all 0.3s ease;
         }
@@ -87,17 +107,31 @@
             transform: scale(1.15);
             box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
         }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 2.4em; }
+            p  { font-size: 1.15em; line-height: 1.6; }
+            #logo { max-width: 240px; margin-bottom: 32px; }
+            .contact-links { gap: 28px; flex-direction: column; }
+            .wip-banner { font-size: 1.05em; padding: 14px 20px; }
+        }
     </style>
 </head>
 <body>
     <canvas id="neuralCanvas"></canvas>
 
     <div class="content">
-        <img src="https://raw.githubusercontent.com/toniocarnialman/dynamiccodes.it/main/logo.png" alt="Logo Dynamic Codes" id="logo">
+        <div class="wip-banner">
+            <strong>Work in Progress</strong> — Il sito è in fase di completamento.<br>
+            Presto sarà online con tutti i nostri servizi e le informazioni dettagliate.
+        </div>
+
+        <img src="https://raw.githubusercontent.com/toniocarnialman/dynamiccodes.it/main/logo.png" alt="Dynamic Codes" id="logo">
         
-        <h1>Stiamo Costruendo il Futuro del Tuo Business</h1>
+        <h1>Soluzioni software, business semplificato</h1>
         
-        <p>La nostra piattaforma è quasi pronta per rivoluzionare il modo in cui la tua azienda cresce. Stiamo mettendo a punto gli ultimi dettagli per offrirti un servizio innovativo, intuitivo e potente.</p>
+        <p>Sviluppiamo software su misura e offriamo assistenza tecnica dedicata per aziende di ogni dimensione: piccole realtà, medie imprese e grandi gruppi.<br>
+        Progettiamo soluzioni solide, scalabili e perfettamente allineate alle tue esigenze reali, per semplificare processi, ridurre complessità e generare valore concreto – con competenza e attenzione costante al tuo obiettivo di business.</p>
 
         <div class="contact-links">
             <a href="mailto:cardinale.antonio85@gmail.com">Contattaci per maggiori info</a>
